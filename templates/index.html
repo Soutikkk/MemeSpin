@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Meme Generator</title>
+    <!-- Simple, clean CSS for basic styling -->
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            text-align: center;
+            padding: 50px;
+            margin: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #ff6f61;
+            margin-top: 0;
+        }
+        p.subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        button {
+            background-color: #ff6f61;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s;
+        }
+        button:hover {
+            background-color: #ff4a3d;
+        }
+        button:active {
+            transform: scale(0.98);
+        }
+        .meme-container {
+            margin-top: 30px;
+        }
+        h2 {
+            font-size: 20px;
+            color: #444;
+            margin-bottom: 15px;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        .error {
+            color: #d9534f;
+            background-color: #f9f2f2;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #ebccd1;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        /* Loading message style */
+        #loading {
+            display: none;
+            margin-top: 20px;
+            font-size: 16px;
+            font-weight: 500;
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Random Meme Generator</h1>
+        <p class="subtitle">Click the button below to get your daily dose of memes!</p>
+        
+        <!-- The form hits the /generate route on the backend -->
+        <form action="/generate" method="GET" onsubmit="showLoading()">
+            <button type="submit">Generate Meme</button>
+        </form>
+
+        <!-- Loading message that shows up when the button is clicked -->
+        <div id="loading">Fetching a fresh meme... Please wait 🚀</div>
+
+        <div class="meme-container">
+            <!-- Jinja2 template logic to display errors if they occur -->
+            {% if error %}
+                <div class="error">
+                    {{ error }}
+                </div>
+            {% endif %}
+
+            <!-- Jinja2 template logic to display the meme if we have one -->
+            {% if meme_url %}
+                <h2>{{ title }}</h2>
+                <img src="{{ meme_url }}" alt="{{ title }}">
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- JavaScript to handle showing the loading message -->
+    <script>
+        function showLoading() {
+            // Show the loading text
+            document.getElementById("loading").style.display = "block";
+            
+            // Optionally, hide the previous meme while fetching the new one
+            const memeContainer = document.querySelector('.meme-container');
+            if (memeContainer) {
+                memeContainer.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
